@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable, { Fields, Files } from 'formidable'; // to handle file uploads
 
 import { TextEmbedding } from '../../types';
-import { createEmbeddings } from '../../services';
+import { createEmbeddings } from '../../services/create-embeddings';
 import extractTextFromFile from '../../services/extract-text-from-file';
 
 // Disable the default body parser to handle file uploads

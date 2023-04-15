@@ -1,16 +1,16 @@
-import { IncomingMessage } from "http";
+import { IncomingMessage } from 'http';
 import {
   ChatCompletionRequestMessageRoleEnum,
   Configuration,
   CreateChatCompletionResponse,
   CreateCompletionRequest,
   OpenAIApi,
-} from "openai";
+} from 'openai';
 
 // This file contains utility functions for interacting with the OpenAI API
-
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("Missing OPENAI_API_KEY environment variable");
+console.log('OPENAI_API_KEY', process.env.NEXT_OPENAI_API_KEY);
+if (!process.env.NEXT_OPENAI_API_KEY) {
+  throw new Error('Missing OPENAI_API_KEY environment variable');
 }
 
 const configuration = new Configuration({
@@ -33,14 +33,14 @@ export async function completion({
   fallback,
   max_tokens,
   temperature = 0,
-  model = "gpt-3.5-turbo", // use gpt-4 for better results
+  model = 'gpt-3.5-turbo', // use gpt-4 for better results
 }: CompletionOptions) {
   try {
     // Note: this is not the proper way to use the ChatGPT conversational format, but it works for now
     const messages = [
       {
         role: ChatCompletionRequestMessageRoleEnum.System,
-        content: prompt ?? "",
+        content: prompt ?? '',
       },
     ];
 
@@ -52,7 +52,7 @@ export async function completion({
     });
 
     if (!result.data.choices[0].message) {
-      throw new Error("No text returned from completions endpoint");
+      throw new Error('No text returned from completions endpoint');
     }
     return result.data.choices[0].message.content;
   } catch (error) {
@@ -66,14 +66,14 @@ export async function* completionStream({
   fallback,
   max_tokens = 800,
   temperature = 0,
-  model = "gpt-3.5-turbo", // use gpt-4 for better results
+  model = 'gpt-3.5-turbo', // use gpt-4 for better results
 }: CompletionOptions) {
   try {
     // Note: this is not the proper way to use the ChatGPT conversational format, but it works for now
     const messages = [
       {
         role: ChatCompletionRequestMessageRoleEnum.System,
-        content: prompt ?? "",
+        content: prompt ?? '',
       },
     ];
 
@@ -86,28 +86,28 @@ export async function* completionStream({
         stream: true,
       },
       {
-        responseType: "stream",
-      }
+        responseType: 'stream',
+      },
     );
     const stream = result.data as any as IncomingMessage;
 
-    let buffer = "";
+    let buffer = '';
     const textDecoder = new TextDecoder();
 
     for await (const chunk of stream) {
       buffer += textDecoder.decode(chunk, { stream: true });
-      const lines = buffer.split("\n");
+      const lines = buffer.split('\n');
 
       // Check if the last line is complete
-      if (buffer.endsWith("\n")) {
-        buffer = "";
+      if (buffer.endsWith('\n')) {
+        buffer = '';
       } else {
-        buffer = lines.pop() || "";
+        buffer = lines.pop() || '';
       }
 
       for (const line of lines) {
-        const message = line.trim().split("data: ")[1];
-        if (message === "[DONE]") {
+        const message = line.trim().split('data: ')[1];
+        if (message === '[DONE]') {
           break;
         }
 
@@ -121,7 +121,7 @@ export async function* completionStream({
               yield data.choices[0].delta?.content;
             }
           } catch (error) {
-            console.error("Error parsing JSON message:", error);
+            console.error('Error parsing JSON message:', error);
           }
         }
       }
@@ -134,7 +134,7 @@ export async function* completionStream({
 
 export async function embedding({
   input,
-  model = "text-embedding-ada-002",
+  model = 'text-embedding-ada-002',
 }: EmbeddingOptions): Promise<number[][]> {
   const result = await openai.createEmbedding({
     model,
@@ -142,7 +142,7 @@ export async function embedding({
   });
 
   if (!result.data.data[0].embedding) {
-    throw new Error("No embedding returned from the completions endpoint");
+    throw new Error('No embedding returned from the completions endpoint');
   }
 
   // Otherwise, return the embeddings

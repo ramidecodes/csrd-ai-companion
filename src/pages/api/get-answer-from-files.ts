@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { completionStream } from '../../services';
+import { completionStream } from '../../services/openai';
 import { FileChunk } from '../../types';
 
 type Data = {

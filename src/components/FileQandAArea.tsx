@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 
 import FileViewerList from './FileViewerList';
 import LoadingText from './LoadingText';
-import { isFileNameInString } from '../services';
+import { isFileNameInString } from '../services/utils';
 import { FileChunk, FileLite } from '../types';
 
 type FileQandAAreaProps = {
