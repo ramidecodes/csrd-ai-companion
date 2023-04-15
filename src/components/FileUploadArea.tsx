@@ -5,14 +5,14 @@ import React, {
   useState,
   memo,
   useRef,
-} from "react";
-import axios from "axios";
-import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
-import { compact } from "lodash";
+} from 'react';
+import axios from 'axios';
+import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
+import { compact } from 'lodash';
 
-import LoadingText from "./LoadingText";
-import { FileLite } from "../types/file";
-import FileViewerList from "./FileViewerList";
+import LoadingText from './LoadingText';
+import { FileLite } from '../types/file';
+import FileViewerList from './FileViewerList';
 
 type FileUploadAreaProps = {
   handleSetFiles: Dispatch<SetStateAction<FileLite[]>>;
@@ -25,19 +25,19 @@ function FileUploadArea(props: FileUploadAreaProps) {
 
   const [files, setFiles] = useState<FileLite[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [dragOver, setDragOver] = useState(false);
   const dropzoneRef = useRef<HTMLLabelElement>(null);
 
   const handleFileChange = useCallback(
     async (selectedFiles: FileList | null) => {
       if (selectedFiles && selectedFiles.length > 0) {
-        setError("");
+        setError('');
 
         if (files.length + selectedFiles.length > props.maxNumFiles) {
           setError(`You can only upload up to ${props.maxNumFiles} files.`);
           if (dropzoneRef.current) {
-            (dropzoneRef.current as any).value = "";
+            (dropzoneRef.current as any).value = '';
           }
           return;
         }
@@ -49,7 +49,7 @@ function FileUploadArea(props: FileUploadAreaProps) {
             // Check the file type
             if (
               file.type.match(
-                /(text\/plain|application\/(pdf|msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document)|text\/(markdown|x-markdown))/
+                /(text\/plain|application\/(pdf|msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document)|text\/(markdown|x-markdown))/,
               ) && // AND file isn't too big
               file.size < props.maxFileSizeMB * 1024 * 1024
             ) {
@@ -59,18 +59,19 @@ function FileUploadArea(props: FileUploadAreaProps) {
               }
 
               const formData = new FormData();
-              formData.append("file", file);
-              formData.append("filename", file.name);
+              formData.append('file', file);
+              formData.append('filename', file.name);
 
+              // TODO: Abstract into api service
               try {
                 const processFileResponse = await axios.post(
-                  "/api/process-file",
+                  '/api/process-file',
                   formData,
                   {
                     headers: {
-                      "Content-Type": "multipart/form-data",
+                      'Content-Type': 'multipart/form-data',
                     },
-                  }
+                  },
                 );
 
                 if (processFileResponse.status === 200) {
@@ -92,7 +93,7 @@ function FileUploadArea(props: FileUploadAreaProps) {
 
                   return fileObject;
                 } else {
-                  console.log("Error creating file embedding");
+                  console.log('Error creating file embedding');
                   return null;
                 }
               } catch (err: any) {
@@ -101,16 +102,17 @@ function FileUploadArea(props: FileUploadAreaProps) {
               }
             } else {
               alert(
-                `Invalid file type or size. Only TXT, PDF, DOCX or MD are allowed, up to ${props.maxFileSizeMB}MB.`
+                `Invalid file type or size. Only TXT, PDF, DOCX or MD are allowed, up to ${props.maxFileSizeMB}MB.`,
               );
               return null; // Skip this file
             }
-          })
+          }),
         );
 
         // Filter out any null values from the uploadedFiles array
         const validFiles = compact(uploadedFiles);
 
+        // TODO: Store files locally so we only generate embeddings once
         // Set the files state with the valid files and the existing files
         setFiles((prevFiles) => [...prevFiles, ...validFiles]);
         handleSetFiles((prevFiles) => [...prevFiles, ...validFiles]);
@@ -118,7 +120,7 @@ function FileUploadArea(props: FileUploadAreaProps) {
         setLoading(false);
       }
     },
-    [files, handleSetFiles, props.maxFileSizeMB, props.maxNumFiles]
+    [files, handleSetFiles, props.maxFileSizeMB, props.maxNumFiles],
   );
 
   const handleDragEnter = useCallback((event: React.DragEvent) => {
@@ -142,7 +144,7 @@ function FileUploadArea(props: FileUploadAreaProps) {
       const droppedFiles = event.dataTransfer.files;
       handleFileChange(droppedFiles);
     },
-    [handleFileChange]
+    [handleFileChange],
   );
 
   return (
@@ -150,7 +152,7 @@ function FileUploadArea(props: FileUploadAreaProps) {
       <label
         htmlFor="dropzone-file"
         className={`flex flex-col shadow items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 relative ${
-          dragOver ? "border-blue-500 bg-blue-50" : ""
+          dragOver ? 'border-blue-500 bg-blue-50' : ''
         }`}
         ref={dropzoneRef}
         onDragEnter={handleDragEnter}
@@ -172,8 +174,8 @@ function FileUploadArea(props: FileUploadAreaProps) {
                 TXT, PDF, DOCX or MD (max {props.maxFileSizeMB}MB per file)
               </p>
               <p className="text-xs mt-1">
-                You can upload up to {props.maxNumFiles - files.length} more{" "}
-                {props.maxNumFiles - files.length === 1 ? "file" : "files"}
+                You can upload up to {props.maxNumFiles - files.length} more{' '}
+                {props.maxNumFiles - files.length === 1 ? 'file' : 'files'}
               </p>
               <input
                 id="dropzone-file"
