@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { searchFileChunks } from '../../services';
+import { searchFileChunks } from '../../services/search-file-chunks';
 import { FileChunk, FileLite } from '../../types';
 
 type Data = {

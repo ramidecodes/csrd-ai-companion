@@ -8,8 +8,8 @@ import {
 } from 'openai';
 
 // This file contains utility functions for interacting with the OpenAI API
-console.log('OPENAI_API_KEY', process.env.NEXT_OPENAI_API_KEY);
-if (!process.env.NEXT_OPENAI_API_KEY) {
+console.log('OPENAI_API_KEY', process.env.OPENAI_API_KEY);
+if (!process.env.OPENAI_API_KEY) {
   throw new Error('Missing OPENAI_API_KEY environment variable');
 }
 
