@@ -11,7 +11,7 @@ import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import { compact } from 'lodash';
 
 import LoadingText from './LoadingText';
-import { FileLite } from '../types/file';
+import { FileLite } from '../types';
 import FileViewerList from './FileViewerList';
 
 type FileUploadAreaProps = {

@@ -1,12 +1,12 @@
-import { useState, useCallback, memo } from "react";
-import { Transition } from "@headlessui/react";
+import { useState, useCallback, memo } from 'react';
+import { Transition } from '@headlessui/react';
 import {
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
   ArrowTopRightOnSquareIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 
-import { FileLite } from "../types/file";
+import { FileLite } from '../types';
 
 type FileProps = {
   file: FileLite;

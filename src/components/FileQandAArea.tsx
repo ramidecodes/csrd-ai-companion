@@ -1,12 +1,12 @@
-import React, { memo, useCallback, useRef, useState } from "react";
-import { Transition } from "@headlessui/react";
-import axios from "axios";
-import ReactMarkdown from "react-markdown";
+import React, { memo, useCallback, useRef, useState } from 'react';
+import { Transition } from '@headlessui/react';
+import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
 
-import FileViewerList from "./FileViewerList";
-import LoadingText from "./LoadingText";
-import { isFileNameInString } from "../services/utils";
-import { FileChunk, FileLite } from "../types/file";
+import FileViewerList from './FileViewerList';
+import LoadingText from './LoadingText';
+import { isFileNameInString } from '../services';
+import { FileChunk, FileLite } from '../types';
 
 type FileQandAAreaProps = {
   files: FileLite[];
@@ -15,9 +15,9 @@ type FileQandAAreaProps = {
 function FileQandAArea(props: FileQandAAreaProps) {
   const questionRef = useRef(null);
   const [hasAskedQuestion, setHasAskedQuestion] = useState(false);
-  const [answerError, setAnswerError] = useState("");
+  const [answerError, setAnswerError] = useState('');
   const [answerLoading, setAnswerLoading] = useState<boolean>(false);
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState('');
   const [answerDone, setAnswerDone] = useState(false);
 
   const handleSearch = useCallback(async () => {
@@ -25,49 +25,49 @@ function FileQandAArea(props: FileQandAAreaProps) {
       return;
     }
 
-    const question = (questionRef?.current as any)?.value ?? "";
-    setAnswer("");
+    const question = (questionRef?.current as any)?.value ?? '';
+    setAnswer('');
     setAnswerDone(false);
 
     if (!question) {
-      setAnswerError("Please ask a question.");
+      setAnswerError('Please ask a question.');
       return;
     }
     if (props.files.length === 0) {
-      setAnswerError("Please upload files before asking a question.");
+      setAnswerError('Please upload files before asking a question.');
       return;
     }
 
     setAnswerLoading(true);
-    setAnswerError("");
+    setAnswerError('');
 
     let results: FileChunk[] = [];
 
     try {
       const searchResultsResponse = await axios.post(
-        "/api/search-file-chunks",
+        '/api/search-file-chunks',
         {
           searchQuery: question,
           files: props.files,
           maxResults: 10,
-        }
+        },
       );
 
       if (searchResultsResponse.status === 200) {
         results = searchResultsResponse.data.searchResults;
       } else {
-        setAnswerError("Sorry, something went wrong!");
+        setAnswerError('Sorry, something went wrong!');
       }
     } catch (err: any) {
-      setAnswerError("Sorry, something went wrong!");
+      setAnswerError('Sorry, something went wrong!');
     }
 
     setHasAskedQuestion(true);
 
-    const res = await fetch("/api/get-answer-from-files", {
-      method: "POST",
+    const res = await fetch('/api/get-answer-from-files', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         question,
@@ -76,7 +76,7 @@ function FileQandAArea(props: FileQandAAreaProps) {
     });
 
     if (res.status === 500) {
-      setAnswerError("Internal server error. Please try again later.");
+      setAnswerError('Internal server error. Please try again later.');
       setAnswerLoading(false);
       return;
     }
@@ -97,11 +97,11 @@ function FileQandAArea(props: FileQandAAreaProps) {
 
   const handleEnterInSearchBar = useCallback(
     async (event: React.SyntheticEvent) => {
-      if ((event as any).key === "Enter") {
+      if ((event as any).key === 'Enter') {
         await handleSearch();
       }
     },
-    [handleSearch]
+    [handleSearch],
   );
 
   return (
@@ -124,7 +124,7 @@ function FileQandAArea(props: FileQandAAreaProps) {
           {answerLoading ? (
             <LoadingText text="Answering question..." />
           ) : (
-            "Ask question"
+            'Ask question'
           )}
         </div>
       </div>
@@ -143,7 +143,7 @@ function FileQandAArea(props: FileQandAAreaProps) {
           {answer && (
             <div className="">
               <ReactMarkdown className="prose" linkTarget="_blank">
-                {`${answer}${answerDone ? "" : "  |"}`}
+                {`${answer}${answerDone ? '' : '  |'}`}
               </ReactMarkdown>
             </div>
           )}
@@ -151,7 +151,7 @@ function FileQandAArea(props: FileQandAAreaProps) {
           <Transition
             show={
               props.files.filter((file) =>
-                isFileNameInString(file.name, answer)
+                isFileNameInString(file.name, answer),
               ).length > 0
             }
             enter="transition duration-600 ease-out"
@@ -164,7 +164,7 @@ function FileQandAArea(props: FileQandAAreaProps) {
           >
             <FileViewerList
               files={props.files.filter((file) =>
-                isFileNameInString(file.name, answer)
+                isFileNameInString(file.name, answer),
               )}
               title="Sources"
               listExpanded={true}

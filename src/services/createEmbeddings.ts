@@ -1,5 +1,5 @@
-import { TextEmbedding } from "../types/file";
-import { getEmbeddingsForText } from "./getEmbeddingsForText";
+import { TextEmbedding } from '../types';
+import { getEmbeddingsForText } from './getEmbeddingsForText';
 
 export type Embeddings = {
   meanEmbedding: number[];
@@ -45,7 +45,7 @@ export async function createEmbeddings({
       chunks: textEmbeddings,
     };
   } catch (error: any) {
-    console.log("Error: ", error);
+    console.log('Error: ', error);
     return {
       meanEmbedding: [],
       chunks: [],

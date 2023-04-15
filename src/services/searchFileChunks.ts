@@ -1,5 +1,5 @@
-import { FileLite, FileChunk } from "../types/file";
-import { embedding } from "./openai";
+import { FileLite, FileChunk } from '../types';
+import { embedding } from './openai';
 
 // This is the minimum cosine similarity score that a file must have with the search query to be considered relevant
 // This is an arbitrary value, and you should vary/ remove this depending on the diversity of your dataset
@@ -35,12 +35,12 @@ export async function searchFileChunks({
             // Calculate the dot product between the chunk embedding and the search query embedding
             const dotProduct = chunk.embedding.reduce(
               (sum, val, i) => sum + val * searchQueryEmbedding[i],
-              0
+              0,
             );
             // Assign the dot product as the score for the chunk
             return { ...chunk, filename: file.name, score: dotProduct };
           })
-        : []
+        : [],
     )
     // Sort the chunks by their scores in descending order
     .sort((a, b) => b.score - a.score)

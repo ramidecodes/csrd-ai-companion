@@ -1,7 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { completionStream } from "../../services/openai";
-import { FileChunk } from "../../types/file";
+import { completionStream } from '../../services';
+import { FileChunk } from '../../types';
 
 type Data = {
   answer?: string;
@@ -12,11 +12,11 @@ const MAX_FILES_LENGTH = 2000 * 3;
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data>,
 ) {
   // Only accept POST requests
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "Method not allowed" });
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
     return;
   }
 
@@ -25,19 +25,19 @@ export default async function handler(
   const question = req.body.question as string;
 
   if (!Array.isArray(fileChunks)) {
-    res.status(400).json({ error: "fileChunks must be an array" });
+    res.status(400).json({ error: 'fileChunks must be an array' });
     return;
   }
 
   if (!question) {
-    res.status(400).json({ error: "question must be a string" });
+    res.status(400).json({ error: 'question must be a string' });
     return;
   }
 
   try {
     const filesString = fileChunks
       .map((fileChunk) => `###\n\"${fileChunk.filename}\"\n${fileChunk.text}`)
-      .join("\n")
+      .join('\n')
       .slice(0, MAX_FILES_LENGTH);
 
     const prompt =
@@ -55,9 +55,9 @@ export default async function handler(
 
     // Set the response headers for streaming
     res.writeHead(200, {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache, no-transform",
-      Connection: "keep-alive",
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache, no-transform',
+      Connection: 'keep-alive',
     });
 
     // Write the data from the stream to the response
@@ -69,6 +69,6 @@ export default async function handler(
     res.end();
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res.status(500).json({ error: 'Something went wrong' });
   }
 }

@@ -1,6 +1,6 @@
-import { TextEmbedding } from "../types/file";
-import { chunkText } from "./chunkText";
-import { embedding } from "./openai";
+import { TextEmbedding } from '../types';
+import { chunkText } from './chunkText';
+import { embedding } from './openai';
 
 // There isn't a good JS tokenizer at the moment, so we are using this approximation of 4 characters per token instead. This might break for some languages.
 const MAX_CHAR_LENGTH = 250 * 4;
@@ -36,7 +36,7 @@ export async function getEmbeddingsForText({
 
     return textEmbeddings;
   } catch (error: any) {
-    console.log("Error: ", error);
+    console.log('Error: ', error);
     return [];
   }
 }

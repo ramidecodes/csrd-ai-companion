@@ -1,10 +1,10 @@
-import React, { memo, useCallback, useState } from "react";
-import { ChevronUpIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
-import { Transition } from "@headlessui/react";
+import React, { memo, useCallback, useState } from 'react';
+import { ChevronUpIcon } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
+import { Transition } from '@headlessui/react';
 
-import File from "./File";
-import { FileLite } from "../types/file";
+import File from './File';
+import { FileLite } from '../types';
 
 type FileViewerListProps = {
   files: FileLite[];
@@ -37,8 +37,8 @@ function FileViewerList(props: FileViewerListProps) {
             <div className="ml-auto w-max flex items-center justify-center">
               <ChevronUpIcon
                 className={clsx(
-                  "w-6 h-6 ml-2 stroke-slate-400 transition-transform cursor-pointer",
-                  !listExpanded && "-rotate-180"
+                  'w-6 h-6 ml-2 stroke-slate-400 transition-transform cursor-pointer',
+                  !listExpanded && '-rotate-180',
                 )}
                 onClick={handleListExpand}
               />

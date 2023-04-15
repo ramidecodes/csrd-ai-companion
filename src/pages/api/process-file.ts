@@ -1,9 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import formidable, { Fields, Files } from "formidable"; // to handle file uploads
+import type { NextApiRequest, NextApiResponse } from 'next';
+import formidable, { Fields, Files } from 'formidable'; // to handle file uploads
 
-import { TextEmbedding } from "../../types/file";
-import extractTextFromFile from "../../services/extractTextFromFile";
-import { createEmbeddings } from "../../services/createEmbeddings";
+import { TextEmbedding } from '../../types';
+import { createEmbeddings, extractTextFromFile } from '../../services';
 
 // Disable the default body parser to handle file uploads
 export const config = { api: { bodyParser: false } };
@@ -18,16 +17,17 @@ type Data = {
 // This function receives a file as a multipart form and returns the text extracted fom the file and the OpenAI embedding for that text
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data>,
 ) {
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "Method not allowed" });
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
     return;
   }
 
   // Create a formidable instance to parse the request as a multipart form
-  const form = new formidable.IncomingForm();
-  form.maxFileSize = 30 * 1024 * 1024; // Set the max file size to 30MB
+  // Set the max file size to 30MB
+  const form = new formidable.IncomingForm({ maxFileSize: 30 * 1024 * 1024 });
+  // form.maxFileSize = 30 * 1024 * 1024;
 
   try {
     const { fields, files } = await new Promise<{
@@ -44,13 +44,13 @@ export default async function handler(
     });
     const file = files.file;
     if (!file || Array.isArray(file) || file.size === 0) {
-      res.status(400).json({ error: "Invalid or missing file" });
+      res.status(400).json({ error: 'Invalid or missing file' });
       return;
     }
 
     const text = await extractTextFromFile({
       filepath: file.filepath,
-      filetype: file.mimetype ?? "",
+      filetype: file.mimetype ?? '',
     });
 
     const { meanEmbedding, chunks } = await createEmbeddings({
