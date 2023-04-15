@@ -2,7 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable, { Fields, Files } from 'formidable'; // to handle file uploads
 
 import { TextEmbedding } from '../../types';
-import { createEmbeddings, extractTextFromFile } from '../../services';
+import { createEmbeddings } from '../../services';
+import extractTextFromFile from '../../services/extract-text-from-file';
 
 // Disable the default body parser to handle file uploads
 export const config = { api: { bodyParser: false } };

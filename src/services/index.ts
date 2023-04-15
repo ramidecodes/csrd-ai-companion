@@ -1,7 +1,7 @@
-export * from './chunkText';
-export * from './createEmbeddings';
-export * from './extractTextFromFile';
-export * from './getEmbeddingsForText';
+export * from './chunk-text';
+export * from './create-embeddings';
+// export * from './extract-text-from-file';
+export * from './get-embeddings-for-text';
 export * from './openai';
-export * from './searchFileChunks';
+export * from './search-file-chunks';
 export * from './utils';

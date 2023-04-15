@@ -79,6 +79,7 @@ function FileUploadArea(props: FileUploadAreaProps) {
                   const meanEmbedding = processFileResponse.data.meanEmbedding;
                   const chunks = processFileResponse.data.chunks;
 
+                  // TODO Store this file Object
                   const fileObject: FileLite = {
                     name: file.name,
                     url: URL.createObjectURL(file),

@@ -1,5 +1,5 @@
 import { TextEmbedding } from '../types';
-import { chunkText } from './chunkText';
+import { chunkText } from './chunk-text';
 import { embedding } from './openai';
 
 // There isn't a good JS tokenizer at the moment, so we are using this approximation of 4 characters per token instead. This might break for some languages.

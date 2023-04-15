@@ -3,7 +3,7 @@ import mammoth from 'mammoth';
 import pdfParse from 'pdf-parse';
 import { NodeHtmlMarkdown } from 'node-html-markdown';
 
-export async function extractTextFromFile({
+export default async function extractTextFromFile({
   filepath,
   filetype,
 }: {
@@ -12,6 +12,7 @@ export async function extractTextFromFile({
 }): Promise<string> {
   const buffer: Buffer = await new Promise((resolve, reject) => {
     const fileStream = fs.createReadStream(filepath);
+    // const fileStream = new FileStream(filepath);
     const chunks: any[] = [];
     fileStream.on('data', (chunk) => {
       chunks.push(chunk);

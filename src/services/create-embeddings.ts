@@ -1,5 +1,5 @@
 import { TextEmbedding } from '../types';
-import { getEmbeddingsForText } from './getEmbeddingsForText';
+import { getEmbeddingsForText } from './get-embeddings-for-text';
 
 export type Embeddings = {
   meanEmbedding: number[];
