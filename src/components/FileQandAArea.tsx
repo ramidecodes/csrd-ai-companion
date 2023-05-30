@@ -20,6 +20,7 @@ function FileQandAArea(props: FileQandAAreaProps) {
   const [answer, setAnswer] = useState('');
   const [answerDone, setAnswerDone] = useState(false);
 
+  // TODO: Get files from actual JSON files
   const handleSearch = useCallback(async () => {
     if (answerLoading) {
       return;

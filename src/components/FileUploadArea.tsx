@@ -113,11 +113,20 @@ function FileUploadArea(props: FileUploadAreaProps) {
         // Filter out any null values from the uploadedFiles array
         const validFiles = compact(uploadedFiles);
 
+        const fileNamesRes = await axios.post('/api/write-file', validFiles, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        if (fileNamesRes.status === 200) {
+          console.log('Successfully wrote embedding files to disk');
+        }
+
         // TODO: Store files locally so we only generate embeddings once
         // Set the files state with the valid files and the existing files
         setFiles((prevFiles) => [...prevFiles, ...validFiles]);
         handleSetFiles((prevFiles) => [...prevFiles, ...validFiles]);
-
         setLoading(false);
       }
     },

@@ -6,6 +6,7 @@ import FileQandAArea from '../components/FileQandAArea';
 import FileUploadArea from '../components/FileUploadArea';
 
 export default function FileQandA() {
+  // TODO: Replace by local file system API
   const [files, setFiles] = useState<FileLite[]>([]);
 
   return (
